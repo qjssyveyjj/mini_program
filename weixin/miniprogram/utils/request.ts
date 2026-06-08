@@ -1,7 +1,7 @@
 /**
  * 网络请求封装
  */
-const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = 'http://192.168.16.146:8080/api'
 
 interface RequestOptions {
   url: string

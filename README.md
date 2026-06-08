@@ -69,7 +69,9 @@ docker run -d --name health-client -p 80:80 \
   health-management-client:alpine3
 ```
 
-镜像均基于 **Alpine 3.20**（后端 OpenJDK 17 JRE，前端 Nginx）。
+镜像均基于 **Alpine 3.20**（后端 OpenJDK 17 JRE，前端 Nginx；前端构建阶段使用 `node:22-alpine3.20` 以满足 Vite 8 要求）。
+
+**前端构建失败排查**：若出现 `rolldown-binding.linux-x64-musl.node` 找不到，请执行 `docker compose build --no-cache client` 重新构建，勿将宿主机 `node_modules` 复制进镜像。
 
 ## 快速启动（本地开发）
 
