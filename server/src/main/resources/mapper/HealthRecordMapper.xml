@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.HealthRecordMapper">
+
+    <select id="findById" resultType="com.example.server.entity.HealthRecord">
+        SELECT h.*, u.nickname FROM health_record h LEFT JOIN user u ON h.user_id = u.id WHERE h.id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.example.server.entity.HealthRecord">
+        SELECT h.*, u.nickname FROM health_record h LEFT JOIN user u ON h.user_id = u.id
+        <where>
+            <if test="userId != null">AND h.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND u.nickname LIKE CONCAT('%',#{keyword},'%')</if>
+        </where>
+        ORDER BY h.record_date DESC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM health_record h LEFT JOIN user u ON h.user_id = u.id
+        <where>
+            <if test="userId != null">AND h.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND u.nickname LIKE CONCAT('%',#{keyword},'%')</if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO health_record(user_id, height, weight, bmi, systolic, diastolic, blood_sugar, heart_rate, record_date, remark)
+        VALUES(#{userId}, #{height}, #{weight}, #{bmi}, #{systolic}, #{diastolic}, #{bloodSugar}, #{heartRate}, #{recordDate}, #{remark})
+    </insert>
+
+    <update id="update">
+        UPDATE health_record
+        <set>
+            <if test="height != null">height = #{height},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="bmi != null">bmi = #{bmi},</if>
+            <if test="systolic != null">systolic = #{systolic},</if>
+            <if test="diastolic != null">diastolic = #{diastolic},</if>
+            <if test="bloodSugar != null">blood_sugar = #{bloodSugar},</if>
+            <if test="heartRate != null">heart_rate = #{heartRate},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM health_record WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM health_record
+    </select>
+
+    <select id="countByDate" resultType="map">
+        SELECT DATE_FORMAT(record_date, '%m-%d') AS name, COUNT(*) AS value
+        FROM health_record
+        WHERE record_date >= DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
+        GROUP BY record_date ORDER BY record_date
+    </select>
+
+</mapper>

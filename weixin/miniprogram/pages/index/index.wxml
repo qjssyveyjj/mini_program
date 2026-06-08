@@ -1,0 +1,72 @@
+<view class="index-page">
+  <view class="gradient-header">
+    <view class="greeting">你好，{{userInfo.nickname || '用户'}}</view>
+    <view class="greeting-sub">今天也要保持健康哦 💪</view>
+  </view>
+
+  <view class="container" style="margin-top: -40rpx">
+    <!-- 今日概览 -->
+    <view class="card overview-card">
+      <view class="section-title">今日健康概览</view>
+      <view class="overview-grid">
+        <view class="overview-item">
+          <view class="overview-value">{{todayHealth.weight || '--'}}</view>
+          <view class="overview-label">体重(kg)</view>
+        </view>
+        <view class="overview-item">
+          <view class="overview-value">{{todayHealth.bmi || '--'}}</view>
+          <view class="overview-label">BMI</view>
+        </view>
+        <view class="overview-item">
+          <view class="overview-value">{{todayCalories}}</view>
+          <view class="overview-label">摄入(千卡)</view>
+        </view>
+        <view class="overview-item">
+          <view class="overview-value">{{todayExercise}}</view>
+          <view class="overview-label">运动(分)</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="card">
+      <view class="section-title">快捷功能</view>
+      <view class="shortcut-grid">
+        <view class="shortcut-item" bindtap="goHealth" data-tab="0">
+          <view class="shortcut-icon" style="background:#e8f4fd">📋</view>
+          <text>健康档案</text>
+        </view>
+        <view class="shortcut-item" bindtap="goHealth" data-tab="1">
+          <view class="shortcut-icon" style="background:#fef3e2">🍎</view>
+          <text>饮食记录</text>
+        </view>
+        <view class="shortcut-item" bindtap="goHealth" data-tab="2">
+          <view class="shortcut-icon" style="background:#fde8e8">🏃</view>
+          <text>运动记录</text>
+        </view>
+        <view class="shortcut-item" bindtap="goHealth" data-tab="3">
+          <view class="shortcut-icon" style="background:#ede8fd">😴</view>
+          <text>睡眠记录</text>
+        </view>
+        <view class="shortcut-item" bindtap="goReminder">
+          <view class="shortcut-icon" style="background:#e8fdf0">⏰</view>
+          <text>健康提醒</text>
+        </view>
+        <view class="shortcut-item" bindtap="goAiChat">
+          <view class="shortcut-icon" style="background:#fde8f4">🤖</view>
+          <text>AI顾问</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最新资讯 -->
+    <view class="card">
+      <view class="section-title">健康资讯</view>
+      <view wx:for="{{articles}}" wx:key="id" class="article-item" bindtap="goArticleDetail" data-id="{{item.id}}">
+        <view class="article-title">{{item.title}}</view>
+        <view class="article-meta">{{item.category}} · {{item.viewCount}}阅读</view>
+      </view>
+      <view wx:if="{{articles.length === 0}}" class="empty-tip">暂无资讯</view>
+    </view>
+  </view>
+</view>

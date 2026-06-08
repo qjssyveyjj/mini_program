@@ -1,0 +1,32 @@
+<view class="chat-page">
+  <view class="chat-header">
+    <view class="chat-avatar">🤖</view>
+    <view>
+      <view class="chat-name">小康 · AI健康顾问</view>
+      <view class="chat-desc">为您提供专业的健康管理建议</view>
+    </view>
+  </view>
+
+  <scroll-view class="chat-messages" scroll-y scroll-into-view="{{scrollTo}}" scroll-with-animation>
+    <view wx:for="{{messages}}" wx:key="index" id="msg-{{index}}" class="message-row {{item.role}}">
+      <view class="message-bubble {{item.role}}">
+        <text user-select>{{item.content}}</text>
+      </view>
+    </view>
+    <view wx:if="{{loading}}" class="message-row assistant">
+      <view class="message-bubble assistant typing">正在思考中...</view>
+    </view>
+  </scroll-view>
+
+  <view class="quick-questions" wx:if="{{messages.length <= 1}}">
+    <view class="quick-title">常见问题</view>
+    <view class="quick-list">
+      <view wx:for="{{quickQuestions}}" wx:key="index" class="quick-item" bindtap="sendQuick" data-text="{{item}}">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="chat-input-bar">
+    <input class="chat-input" placeholder="输入您的健康问题..." value="{{inputText}}" bindinput="onInput" confirm-type="send" bindconfirm="sendMessage" />
+    <button class="send-btn" bindtap="sendMessage" disabled="{{loading}}">发送</button>
+  </view>
+</view>

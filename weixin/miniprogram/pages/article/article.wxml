@@ -1,0 +1,11 @@
+<view class="container">
+  <view wx:for="{{list}}" wx:key="id" class="card article-card" bindtap="goDetail" data-id="{{item.id}}">
+    <view class="article-title">{{item.title}}</view>
+    <view class="article-info">
+      <text class="article-category">{{item.category}}</text>
+      <text class="article-views">{{item.viewCount}} 阅读</text>
+    </view>
+    <view class="article-preview">{{item.content}}</view>
+  </view>
+  <view wx:if="{{list.length === 0}}" class="empty-tip">暂无资讯</view>
+</view>

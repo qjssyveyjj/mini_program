@@ -1,0 +1,19 @@
+<view class="login-page">
+  <view class="login-header">
+    <view class="logo-text">Java1234</view>
+    <view class="subtitle">个人健康管理系统</view>
+  </view>
+  <view class="login-form">
+    <view class="input-group">
+      <text class="input-label">用户名</text>
+      <input class="input-field" placeholder="请输入用户名" value="{{username}}" bindinput="onUsernameInput" />
+    </view>
+    <view class="input-group">
+      <text class="input-label">密码</text>
+      <input class="input-field" placeholder="请输入密码" password value="{{password}}" bindinput="onPasswordInput" />
+    </view>
+    <button class="btn-login" bindtap="handleLogin" loading="{{loading}}">登 录</button>
+    <view class="register-link" bindtap="handleRegister">没有账号？立即注册</view>
+    <view class="login-tip">测试账号: zhangsan / 123456</view>
+  </view>
+</view>

@@ -1,0 +1,97 @@
+<view class="health-page">
+  <view class="tab-bar">
+    <view wx:for="{{tabs}}" wx:key="index" class="tab-item {{activeTab === index ? 'active' : ''}}" bindtap="switchTab" data-index="{{index}}">
+      {{item}}
+    </view>
+  </view>
+
+  <view class="container">
+    <view class="add-btn" bindtap="showAddForm">+ 添加记录</view>
+
+    <!-- 健康档案 -->
+    <block wx:if="{{activeTab === 0}}">
+      <view wx:for="{{healthList}}" wx:key="id" class="card record-card">
+        <view class="record-date">{{item.recordDate}}</view>
+        <view class="record-grid">
+          <text>体重: {{item.weight}}kg</text>
+          <text>BMI: {{item.bmi}}</text>
+          <text>血压: {{item.systolic}}/{{item.diastolic}}</text>
+          <text>血糖: {{item.bloodSugar}}</text>
+          <text>心率: {{item.heartRate}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 饮食记录 -->
+    <block wx:if="{{activeTab === 1}}">
+      <view wx:for="{{dietList}}" wx:key="id" class="card record-card">
+        <view class="record-header">
+          <text class="meal-tag">{{item.mealType}}</text>
+          <text class="record-date">{{item.recordDate}}</text>
+        </view>
+        <view class="record-main">{{item.foodName}} - {{item.calories}}千卡</view>
+      </view>
+    </block>
+
+    <!-- 运动记录 -->
+    <block wx:if="{{activeTab === 2}}">
+      <view wx:for="{{exerciseList}}" wx:key="id" class="card record-card">
+        <view class="record-header">
+          <text class="meal-tag">{{item.exerciseType}}</text>
+          <text class="record-date">{{item.recordDate}}</text>
+        </view>
+        <view class="record-main">{{item.duration}}分钟 · 消耗{{item.caloriesBurned}}千卡</view>
+      </view>
+    </block>
+
+    <!-- 睡眠记录 -->
+    <block wx:if="{{activeTab === 3}}">
+      <view wx:for="{{sleepList}}" wx:key="id" class="card record-card">
+        <view class="record-date">{{item.recordDate}}</view>
+        <view class="record-main">{{item.sleepStart}} - {{item.sleepEnd}} · {{item.duration}}小时</view>
+        <view class="record-sub">质量评分: {{item.quality}}/5</view>
+      </view>
+    </block>
+
+    <view wx:if="{{isEmpty}}" class="empty-tip">暂无记录，点击上方添加</view>
+  </view>
+
+  <!-- 添加表单弹窗 -->
+  <view class="form-mask" wx:if="{{showForm}}" bindtap="hideForm">
+    <view class="form-panel" catchtap="">
+      <view class="form-title">添加{{tabs[activeTab]}}</view>
+      <view class="form-body">
+        <block wx:if="{{activeTab === 0}}">
+          <input placeholder="体重(kg)" type="digit" data-field="weight" bindinput="onFormInput" />
+          <input placeholder="收缩压" type="number" data-field="systolic" bindinput="onFormInput" />
+          <input placeholder="舒张压" type="number" data-field="diastolic" bindinput="onFormInput" />
+          <input placeholder="血糖" type="digit" data-field="bloodSugar" bindinput="onFormInput" />
+          <input placeholder="心率" type="number" data-field="heartRate" bindinput="onFormInput" />
+        </block>
+        <block wx:if="{{activeTab === 1}}">
+          <picker mode="selector" range="{{mealTypes}}" bindchange="onMealChange">
+            <view class="picker-field">餐别: {{formData.mealType || '请选择'}}</view>
+          </picker>
+          <input placeholder="食物名称" data-field="foodName" bindinput="onFormInput" />
+          <input placeholder="热量(千卡)" type="number" data-field="calories" bindinput="onFormInput" />
+        </block>
+        <block wx:if="{{activeTab === 2}}">
+          <input placeholder="运动类型" data-field="exerciseType" bindinput="onFormInput" />
+          <input placeholder="时长(分钟)" type="number" data-field="duration" bindinput="onFormInput" />
+          <input placeholder="消耗热量" type="number" data-field="caloriesBurned" bindinput="onFormInput" />
+        </block>
+        <block wx:if="{{activeTab === 3}}">
+          <picker mode="time" bindchange="onSleepStartChange">
+            <view class="picker-field">入睡: {{formData.sleepStart || '请选择'}}</view>
+          </picker>
+          <picker mode="time" bindchange="onSleepEndChange">
+            <view class="picker-field">起床: {{formData.sleepEnd || '请选择'}}</view>
+          </picker>
+          <input placeholder="时长(小时)" type="digit" data-field="duration" bindinput="onFormInput" />
+          <input placeholder="质量(1-5)" type="number" data-field="quality" bindinput="onFormInput" />
+        </block>
+      </view>
+      <button class="btn-primary" bindtap="submitForm">保存</button>
+    </view>
+  </view>
+</view>

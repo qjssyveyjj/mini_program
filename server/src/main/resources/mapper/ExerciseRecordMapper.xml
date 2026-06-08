@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.ExerciseRecordMapper">
+
+    <select id="findById" resultType="com.example.server.entity.ExerciseRecord">
+        SELECT e.*, u.nickname FROM exercise_record e LEFT JOIN user u ON e.user_id = u.id WHERE e.id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.example.server.entity.ExerciseRecord">
+        SELECT e.*, u.nickname FROM exercise_record e LEFT JOIN user u ON e.user_id = u.id
+        <where>
+            <if test="userId != null">AND e.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (e.exercise_type LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+        ORDER BY e.record_date DESC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM exercise_record e LEFT JOIN user u ON e.user_id = u.id
+        <where>
+            <if test="userId != null">AND e.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (e.exercise_type LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO exercise_record(user_id, exercise_type, duration, calories_burned, record_date, remark)
+        VALUES(#{userId}, #{exerciseType}, #{duration}, #{caloriesBurned}, #{recordDate}, #{remark})
+    </insert>
+
+    <update id="update">
+        UPDATE exercise_record
+        <set>
+            <if test="exerciseType != null">exercise_type = #{exerciseType},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="caloriesBurned != null">calories_burned = #{caloriesBurned},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM exercise_record WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM exercise_record
+    </select>
+
+</mapper>

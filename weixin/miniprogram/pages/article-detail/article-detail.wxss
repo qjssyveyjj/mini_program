@@ -1,0 +1,4 @@
+.article-title { font-size: 36rpx; font-weight: 700; color: #333; line-height: 1.5; }
+.article-meta { display: flex; gap: 20rpx; margin: 20rpx 0; font-size: 24rpx; color: #999; }
+.category { background: #ede8fd; color: #667eea; padding: 4rpx 16rpx; border-radius: 8rpx; }
+.article-content { font-size: 30rpx; color: #555; line-height: 1.8; margin-top: 24rpx; }

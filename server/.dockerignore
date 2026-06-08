@@ -1,0 +1,10 @@
+target/
+.idea/
+*.iml
+.env
+.git/
+.gitignore
+HELP.md
+README.md
+Dockerfile
+.dockerignore

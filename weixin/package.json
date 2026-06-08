@@ -1,0 +1,15 @@
+{
+  "name": "health-management-weixin",
+  "version": "1.0.0",
+  "description": "Java1234微信小程序个人健康管理系统",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "miniprogram-api-typings": "^2.8.3-1"
+  }
+}

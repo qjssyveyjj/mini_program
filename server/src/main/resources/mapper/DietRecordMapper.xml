@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.DietRecordMapper">
+
+    <select id="findById" resultType="com.example.server.entity.DietRecord">
+        SELECT d.*, u.nickname FROM diet_record d LEFT JOIN user u ON d.user_id = u.id WHERE d.id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.example.server.entity.DietRecord">
+        SELECT d.*, u.nickname FROM diet_record d LEFT JOIN user u ON d.user_id = u.id
+        <where>
+            <if test="userId != null">AND d.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (d.food_name LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+        ORDER BY d.record_date DESC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM diet_record d LEFT JOIN user u ON d.user_id = u.id
+        <where>
+            <if test="userId != null">AND d.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (d.food_name LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO diet_record(user_id, meal_type, food_name, calories, record_date, remark)
+        VALUES(#{userId}, #{mealType}, #{foodName}, #{calories}, #{recordDate}, #{remark})
+    </insert>
+
+    <update id="update">
+        UPDATE diet_record
+        <set>
+            <if test="mealType != null">meal_type = #{mealType},</if>
+            <if test="foodName != null">food_name = #{foodName},</if>
+            <if test="calories != null">calories = #{calories},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM diet_record WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM diet_record
+    </select>
+
+</mapper>

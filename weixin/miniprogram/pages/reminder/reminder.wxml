@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="add-btn" bindtap="showAddForm">+ 添加提醒</view>
+  <view wx:for="{{list}}" wx:key="id" class="card reminder-card">
+    <view class="reminder-header">
+      <view class="reminder-type">{{item.reminderType}}</view>
+      <view class="reminder-time">{{item.remindTime}}</view>
+    </view>
+    <view class="reminder-title">{{item.title}}</view>
+    <view class="reminder-content">{{item.content}}</view>
+    <view class="reminder-status {{item.isEnabled ? 'enabled' : ''}}">
+      {{item.isEnabled ? '已启用' : '已禁用'}}
+    </view>
+  </view>
+  <view wx:if="{{list.length === 0}}" class="empty-tip">暂无提醒，点击上方添加</view>
+
+  <view class="form-mask" wx:if="{{showForm}}" bindtap="hideForm">
+    <view class="form-panel" catchtap="">
+      <view class="form-title">添加健康提醒</view>
+      <picker mode="selector" range="{{reminderTypes}}" bindchange="onTypeChange">
+        <view class="picker-field">类型: {{formData.reminderType || '请选择'}}</view>
+      </picker>
+      <input placeholder="提醒标题" data-field="title" bindinput="onInput" />
+      <input placeholder="提醒内容" data-field="content" bindinput="onInput" />
+      <picker mode="time" bindchange="onTimeChange">
+        <view class="picker-field">时间: {{formData.remindTime || '请选择'}}</view>
+      </picker>
+      <button class="btn-primary" bindtap="submitForm">保存</button>
+    </view>
+  </view>
+</view>

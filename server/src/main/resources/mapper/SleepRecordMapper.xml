@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.SleepRecordMapper">
+
+    <select id="findById" resultType="com.example.server.entity.SleepRecord">
+        SELECT s.*, u.nickname FROM sleep_record s LEFT JOIN user u ON s.user_id = u.id WHERE s.id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.example.server.entity.SleepRecord">
+        SELECT s.*, u.nickname FROM sleep_record s LEFT JOIN user u ON s.user_id = u.id
+        <where>
+            <if test="userId != null">AND s.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND u.nickname LIKE CONCAT('%',#{keyword},'%')</if>
+        </where>
+        ORDER BY s.record_date DESC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM sleep_record s LEFT JOIN user u ON s.user_id = u.id
+        <where>
+            <if test="userId != null">AND s.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND u.nickname LIKE CONCAT('%',#{keyword},'%')</if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sleep_record(user_id, sleep_start, sleep_end, duration, quality, record_date, remark)
+        VALUES(#{userId}, #{sleepStart}, #{sleepEnd}, #{duration}, #{quality}, #{recordDate}, #{remark})
+    </insert>
+
+    <update id="update">
+        UPDATE sleep_record
+        <set>
+            <if test="sleepStart != null">sleep_start = #{sleepStart},</if>
+            <if test="sleepEnd != null">sleep_end = #{sleepEnd},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="quality != null">quality = #{quality},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM sleep_record WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM sleep_record
+    </select>
+
+</mapper>

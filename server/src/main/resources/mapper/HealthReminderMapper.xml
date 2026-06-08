@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.server.mapper.HealthReminderMapper">
+
+    <select id="findById" resultType="com.example.server.entity.HealthReminder">
+        SELECT r.*, u.nickname FROM health_reminder r LEFT JOIN user u ON r.user_id = u.id WHERE r.id = #{id}
+    </select>
+
+    <select id="findPage" resultType="com.example.server.entity.HealthReminder">
+        SELECT r.*, u.nickname FROM health_reminder r LEFT JOIN user u ON r.user_id = u.id
+        <where>
+            <if test="userId != null">AND r.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (r.title LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+        ORDER BY r.remind_time ASC LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM health_reminder r LEFT JOIN user u ON r.user_id = u.id
+        <where>
+            <if test="userId != null">AND r.user_id = #{userId}</if>
+            <if test="keyword != null and keyword != ''">AND (r.title LIKE CONCAT('%',#{keyword},'%') OR u.nickname LIKE CONCAT('%',#{keyword},'%'))</if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO health_reminder(user_id, reminder_type, title, content, remind_time, is_enabled)
+        VALUES(#{userId}, #{reminderType}, #{title}, #{content}, #{remindTime}, #{isEnabled})
+    </insert>
+
+    <update id="update">
+        UPDATE health_reminder
+        <set>
+            <if test="reminderType != null">reminder_type = #{reminderType},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="remindTime != null">remind_time = #{remindTime},</if>
+            <if test="isEnabled != null">is_enabled = #{isEnabled},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM health_reminder WHERE id = #{id}
+    </delete>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM health_reminder
+    </select>
+
+</mapper>

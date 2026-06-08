@@ -1,0 +1,40 @@
+# Java1234微信小程序个人健康管理系统 - Docker Compose
+# 仅打包前端 + 后端，MySQL 使用外部已有实例
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: health-management-server:alpine3
+    container_name: health-server
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      FILE_UPLOAD_DIR: /app/uploads
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m}
+    env_file:
+      - ./server/.env
+    volumes:
+      - uploads_data:/app/uploads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: health-management-client:alpine3
+    container_name: health-client
+    restart: unless-stopped
+    ports:
+      - "${CLIENT_PORT:-80}:80"
+    depends_on:
+      - server
+
+volumes:
+  uploads_data:
