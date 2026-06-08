@@ -1,0 +1,1 @@
+import{S as e,o as t}from"./index-L63iC0vc.js";var n=t(`admin`,()=>{let t=e(JSON.parse(localStorage.getItem(`admin`)||`null`));function n(e){t.value=e,localStorage.setItem(`admin`,JSON.stringify(e))}function r(){t.value=null,localStorage.removeItem(`admin`)}return{admin:t,setAdmin:n,logout:r}});export{n as t};
