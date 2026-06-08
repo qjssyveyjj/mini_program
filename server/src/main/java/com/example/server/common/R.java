@@ -1,7 +1,6 @@
 package com.example.server.common;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 统一API响应结果封装类
@@ -92,17 +91,6 @@ public class R extends HashMap<String, Object> {
     @Override
     public R put(String key, Object value) {
         super.put(key, value);
-        return this;
-    }
-
-    /**
-     * 链式设置多个响应字段
-     *
-     * @param map 字段映射
-     * @return 当前响应对象
-     */
-    public R putAll(Map<String, Object> map) {
-        super.putAll(map);
         return this;
     }
 }

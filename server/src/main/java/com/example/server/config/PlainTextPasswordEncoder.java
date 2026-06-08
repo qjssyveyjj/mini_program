@@ -28,7 +28,7 @@ public class PlainTextPasswordEncoder implements PasswordEncoder {
      * @return 是否匹配
      */
     @Override
-    public boolean matches(CharSequence rawPassword, CharSequence encodedPassword) {
-        return rawPassword.toString().equals(encodedPassword.toString());
+    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+        return rawPassword.toString().equals(encodedPassword);
     }
 }
